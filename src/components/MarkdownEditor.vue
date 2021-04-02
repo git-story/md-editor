@@ -115,6 +115,27 @@ export default {
 							instance.replaceSelection(Array(instance.getOption('tabSize') + 1).join(' '), 'end', '+input')
 						}
 					},
+					'Ctrl-V': async (instance) => {
+						const clipboardItems = await navigator.clipboard.read();
+
+						for (const clipboardItem of clipboardItems) {
+
+							for (const type of clipboardItem.types) {
+								const blob = await clipboardItem.getType(type);
+
+								if ( blob.type.startsWith('image') ) {
+									const reader = new FileReader();
+									reader.onloadend = () => {
+										const base64data = reader.result;
+										console.log(base64data);
+										//instance.replaceSelection(`![image](${base64data})`);
+									}
+									reader.readAsDataURL(blob);
+								}
+							}
+
+						}
+					},
 				},
 				indentUnit: this.config.tabSize,
 				indentWithTabs: false,
@@ -184,6 +205,10 @@ export default {
 					onload: () => { this.isVimLoaded = true },
 				})
 			}
+			//this.editor.off('keyHandled', this.keyHandled);
+			//this.editor.on('keyHandled', this.keyHandled);
+			this.editor.getWrapperElement().removeEventListener('paste', this.pasteEvent);
+			this.editor.getWrapperElement().addEventListener('paste', this.pasteEvent);
 		},
 		maybeSetVimMode() {
 			if (this.initialVimMode && !this.isInitialVimModeSet && this.keyMap === 'vim') {
