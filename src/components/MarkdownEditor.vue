@@ -124,13 +124,19 @@ export default {
 								const blob = await clipboardItem.getType(type);
 
 								if ( blob.type.startsWith('image') ) {
+									/*
 									const reader = new FileReader();
 									reader.onloadend = () => {
 										const base64data = reader.result;
 										console.log(base64data);
-										//instance.replaceSelection(`![image](${base64data})`);
+										instance.replaceSelection(`![image](${base64data})`);
 									}
 									reader.readAsDataURL(blob);
+									*/
+									instance.replaceSelection(`![image](${URL.createObjectURL(blob)})`);
+								} else {
+									const text = await blob.text();
+									instance.replaceSelection(text);
 								}
 							}
 
