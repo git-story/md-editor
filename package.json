@@ -3,6 +3,9 @@
 	"license": "MIT",
 	"version": "v0.3.1",
 	"main": "./dist/MarkdownEditor.umd.js",
+	"author": {
+		"name": "git-story"
+	},
 	"scripts": {
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build --target lib --name MarkdownEditor ./src/components/MarkdownEditor.vue",

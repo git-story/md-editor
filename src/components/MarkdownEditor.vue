@@ -119,27 +119,16 @@ export default {
 						const clipboardItems = await navigator.clipboard.read();
 
 						for (const clipboardItem of clipboardItems) {
-
 							for (const type of clipboardItem.types) {
 								const blob = await clipboardItem.getType(type);
 
-								if ( blob.type.startsWith('image') ) {
-									/*
-									const reader = new FileReader();
-									reader.onloadend = () => {
-										const base64data = reader.result;
-										console.log(base64data);
-										instance.replaceSelection(`![image](${base64data})`);
-									}
-									reader.readAsDataURL(blob);
-									*/
+								if (blob.type.startsWith('image')) {
 									instance.replaceSelection(`![image](${URL.createObjectURL(blob)})`);
 								} else {
 									const text = await blob.text();
 									instance.replaceSelection(text);
 								}
 							}
-
 						}
 					},
 				},
@@ -211,10 +200,6 @@ export default {
 					onload: () => { this.isVimLoaded = true },
 				})
 			}
-			//this.editor.off('keyHandled', this.keyHandled);
-			//this.editor.on('keyHandled', this.keyHandled);
-			this.editor.getWrapperElement().removeEventListener('paste', this.pasteEvent);
-			this.editor.getWrapperElement().addEventListener('paste', this.pasteEvent);
 		},
 		maybeSetVimMode() {
 			if (this.initialVimMode && !this.isInitialVimModeSet && this.keyMap === 'vim') {
@@ -265,6 +250,26 @@ export default {
 
 			// set cursor position back to where it was
 			this.editor.setCursor(cursor)
+		},
+		blobToBase64(url) {
+			return new Promise(async (resolve, reject) => {
+				const res = await fetch(url);
+				const reader = new FileReader();
+				reader.onloadend = () => {
+					resolve(reader.result);
+				}
+				reader.readAsDataURL(await res.blob());
+			});
+		},
+		async buildMarkdown() {
+			const md = this.markdown;
+			for ( const img of this.images ) {
+				if ( img.url.startsWith('blob:') ) {
+					const b64img = await this.blobToBase64(img.url);
+					md.replaceLine(img.line, `![image](${b64img})`);
+				}
+			}
+			return md.text;
 		},
 	},
 	created() {
