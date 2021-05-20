@@ -123,7 +123,13 @@ export default {
 								const blob = await clipboardItem.getType(type);
 
 								if (blob.type.startsWith('image')) {
-									instance.replaceSelection(`![image](${URL.createObjectURL(blob)})`);
+									const blobUrl = URL.createObjectURL(blob);
+									instance.replaceSelection(`![image](${blobUrl})`);
+									/* Test Code
+									const b64 = await this.blobToBase64(blobUrl);
+									console.log('base64', b64);
+									console.log('url ori ', blobUrl, 'resolve', this.base64URLToBlobURL(b64));
+									*/
 								} else {
 									const text = await blob.text();
 									instance.replaceSelection(text);
@@ -260,6 +266,41 @@ export default {
 				}
 				reader.readAsDataURL(await res.blob());
 			});
+		},
+		base64ToBlob(b64Data, contentType='', sliceSize=512) {
+			// https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+			const byteCharacters = atob(b64Data);
+			const byteArrays = [];
+
+			for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+				const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+				const byteNumbers = new Array(slice.length);
+				for (let i = 0; i < slice.length; i++) {
+					byteNumbers[i] = slice.charCodeAt(i);
+				}
+
+				const byteArray = new Uint8Array(byteNumbers);
+				byteArrays.push(byteArray);
+			}
+
+			const blob = new Blob(byteArrays, {type: contentType});
+			return blob;
+		},
+		parseB64URL(b64) {
+			const data = b64.match(/^data:(.*)?;(?:base64,)?(.*)/);
+			if ( data.length !== 3 ) {
+				throw Error('This is not base64 url');
+			}
+			return {
+				contentType: data[1],
+				data: data[2],
+			};
+		},
+		base64URLToBlobURL(b64URL, contentType='', sliceSize=512) {
+			const data = this.parseB64URL(b64URL);
+			const blob = this.base64ToBlob(data.data, data.contentType, sliceSize);
+			return URL.createObjectURL(blob);
 		},
 		async buildMarkdown() {
 			const md = this.markdown;
