@@ -13,6 +13,7 @@
 				<span>dark</span>
 			</label>
 		</div>
+		<button @click="test">TEST</button>
 	</div>
 </template>
 
@@ -39,6 +40,11 @@ export default {
 	},
 	mounted() {
 		this.$refs.editor.focus()
+	},
+	methods: {
+		test() {
+			this.$refs.editor.buildMarkdown();
+		},
 	},
 }
 </script>

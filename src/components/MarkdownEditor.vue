@@ -74,6 +74,7 @@ export default {
 			isVimLoaded: false,
 			text: '',
 			widgets: [],
+			imgIc: 0,
 		}
 	},
 	watch: {
@@ -124,7 +125,7 @@ export default {
 
 								if (blob.type.startsWith('image')) {
 									const blobUrl = URL.createObjectURL(blob);
-									instance.replaceSelection(`![image](${blobUrl})`);
+									instance.replaceSelection(`![image${imgIc++}](${blobUrl})`);
 									/* Test Code
 									const b64 = await this.blobToBase64(blobUrl);
 									console.log('base64', b64);
