@@ -1,7 +1,7 @@
 {
 	"name": "@git-story/md-editor",
 	"license": "MIT",
-	"version": "v0.3.7",
+	"version": "v0.3.8",
 	"main": "./dist/MarkdownEditor.umd.js",
 	"author": {
 		"name": "git-story"
