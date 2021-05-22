@@ -304,10 +304,12 @@ export default {
 		},
 		async buildMarkdown() {
 			const md = this.markdown;
+			const splMd = md.text.split('\n');
 			for ( const img of this.images ) {
 				if ( img.url.startsWith('blob:') ) {
 					const b64img = await this.blobToBase64(img.url);
-					md.replaceLine(img.line, `![image](${b64img})`);
+					const repl = splMd[img.line].replace(/!\[(.*?)\]\((.+?)\)/, `![$1](${b64img})`);
+					md.replaceLine(img.line, repl);
 				}
 			}
 			return md.text;
