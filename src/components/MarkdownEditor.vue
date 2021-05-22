@@ -125,7 +125,7 @@ export default {
 
 								if (blob.type.startsWith('image')) {
 									const blobUrl = URL.createObjectURL(blob);
-									instance.replaceSelection(`![image${imgIc++}](${blobUrl})`);
+									instance.replaceSelection(`![image${this.imgIc++}](${blobUrl})`);
 									/* Test Code
 									const b64 = await this.blobToBase64(blobUrl);
 									console.log('base64', b64);
