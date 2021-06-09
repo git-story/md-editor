@@ -120,7 +120,8 @@ export default {
 						const clipboardItems = await navigator.clipboard.read();
 
 						for (const clipboardItem of clipboardItems) {
-							for (const type of clipboardItem.types) {
+							for ( let i = 0; i < clipboardItem.types.length; i++ ) {
+								const type = clipboardItem.types[i];
 								const blob = await clipboardItem.getType(type);
 
 								if (blob.type.startsWith('image')) {
@@ -131,6 +132,9 @@ export default {
 									console.log('base64', b64);
 									console.log('url ori ', blobUrl, 'resolve', this.base64URLToBlobURL(b64));
 									*/
+								} else if ( blob.type === 'text/html' && clipboardItem.types[i+1].startsWith('image') ) {
+									// do nothing
+									// When you copy an image from the browser, the source is copied as well.
 								} else {
 									const text = await blob.text();
 									instance.replaceSelection(text);

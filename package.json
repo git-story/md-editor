@@ -42,7 +42,10 @@
 		"typescript": "~3.9.3",
 		"vue-template-compiler": "^2.6.11"
 	},
-	"files": [ "dist", "src" ],
+	"files": [
+		"dist",
+		"src"
+	],
 	"lint-staged": {
 		"*.{js,jsx,vue,ts,tsx}": [
 			"vue-cli-service lint",
