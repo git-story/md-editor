@@ -1,37 +1,35 @@
 # md-editor
 
-### Original repository is [here](https://github.com/voraciousdev/vue-markdown-editor)
+### 원본 레포지토리는 [여기](https://github.com/voraciousdev/vue-markdown-editor)에서 확인하실 수 있습니다.
 
-## Contribute
+## 빌드
 
-This library uses `yarn`.
-
-### Install dependencies
+### 종속성 설치
 
 ```shell
-yarn install
+npm install
 ```
 
-### Compile and hot-reload for development
+### Vue 테스트 서버 실행
 
 ```shell
-yarn serve
+npm run serve
 ```
 
-### Compile for production
+### 배포용 빌드
 
 ```shell
-yarn build
+npm run build
 ```
 
-### Run the unit tests
+### 테스트 실행
 
 ```shell
-yarn test:unit
+npm run test:unit
 ```
 
-### Lint and fix files
+### Lint
 
 ```shell
-yarn lint
+npm run lint
 ```
