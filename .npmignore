@@ -1,2 +1,9 @@
 *.swp
-src
+src/**/*
+package-lock.json
+yarn.lock
+babel.config.js
+jest.config.js
+tsconfig.json
+vue.config.js
+node_modules
