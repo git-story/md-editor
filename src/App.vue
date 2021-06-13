@@ -13,7 +13,8 @@
 				<span>dark</span>
 			</label>
 		</div>
-		<button @click="test">TEST</button>
+		<button @click="test">buildMarkdown</button><br>
+		<button @click="html">buildHTML</button><br>
 	</div>
 </template>
 
@@ -42,8 +43,11 @@ export default {
 		this.$refs.editor.focus()
 	},
 	methods: {
-		test() {
-			this.$refs.editor.buildMarkdown();
+		async test() {
+			console.log(await this.$refs.editor.buildMarkdown());
+		},
+		html() {
+			console.log(this.$refs.editor.markdown.html);
 		},
 	},
 }

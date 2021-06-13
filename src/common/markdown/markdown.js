@@ -1,9 +1,14 @@
 import { parseCodeblocks } from './parsers'
 import { extractImages, stripCodeblocks } from './utils'
+import marked from 'marked';
 
 class Markdown {
 	constructor(text) {
 		this.text = text || ''
+	}
+
+	get html() {
+		return marked(this.text);
 	}
 
 	codeblocks() {
