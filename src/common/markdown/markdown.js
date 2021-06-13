@@ -1,6 +1,28 @@
 import { parseCodeblocks } from './parsers'
 import { extractImages, stripCodeblocks } from './utils'
 import marked from 'marked';
+import hljs from 'highlight.js';
+
+const mappingLanguage = (language) => {
+	switch ( language ) {
+		case 'js': return 'javascript';
+		case 'ts': return 'typescript';
+	}
+	return language;
+}
+
+
+marked.setOptions({
+	langPrefix: 'hljs language-',
+	highlight: (code, language) => {
+		try {
+			language = mappingLanguage(language);
+			return hljs.highlight(language, code).value;
+		} catch {
+			return code;
+		}
+	},
+});
 
 class Markdown {
 	constructor(text) {
