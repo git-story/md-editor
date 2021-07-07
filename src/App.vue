@@ -13,7 +13,7 @@
 				<span>dark</span>
 			</label>
 		</div>
-		<tool-bar />
+		<tool-bar :dark="theme === 'dark'"/>
 		<button @click="test">buildMarkdown</button><br>
 		<button @click="html">buildHTML</button><br>
 	</div>

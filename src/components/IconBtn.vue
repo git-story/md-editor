@@ -20,10 +20,14 @@ export default {
 			type: String,
 			default: 'md',
 		},
+		dark: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	computed: {
 		iconSvg() {
-			return require(`@/assets/icons/${this.icon}.svg`);
+			return require(`@/assets/icons/${this.icon}${!this.dark ? '-dark' : ''}.svg`);
 		},
 		iconSize() {
 			switch( this.size ) {
@@ -37,15 +41,28 @@ export default {
 <style scoped>
 .mde-icon-btn-wrapper {
 	cursor: pointer;
-	background-color: ##ffffff;
+	background-color: #000000;
 	transition: background 0.8s;
 }
 
+.mde-dark .mde-icon-btn-wrapper {
+	background-color: #ffffff;
+}
+
 .mde-icon-btn-wrapper:hover {
+	background: #424242 radial-gradient(circle, transparent 1%, #424242 1%) center/15000%;
+}
+
+.mde-dark .mde-icon-btn-wrapper:hover {
 	background: #ebebeb radial-gradient(circle, transparent 1%, #ebebeb 1%) center/15000%;
 }
 
 .mde-icon-btn-wrapper:active {
+	background-color: #595959;
+	transition: background 0s;
+}
+
+.mde-dark .mde-icon-btn-wrapper:active {
 	background-color: #afafaf;
 	transition: background 0s;
 }
