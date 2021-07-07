@@ -1,11 +1,22 @@
 <template>
-	<codemirror
-		class="editor"
-		:class="{ dark: (theme === 'dark'), light: (theme === 'light') }"
-		:options="options"
-		:value="value"
-		@input="onInput"
-		@ready="onReady"/>
+	<div>
+		<codemirror
+			class="editor"
+			:class="{ dark: (theme === 'dark'), light: (theme === 'light') }"
+			:options="options"
+			:value="value"
+			@input="onInput"
+			@ready="onReady"
+			@blur="hideToolbar"/>
+		<tool-bar
+	  		ref="tool"
+	 		@mouseover="onToolbarMouseOver"
+	 		@mouseleave="onToolbarMouseLeave"
+			:dark="theme === 'dark'"
+	 		:style="toolbar.show ? 'opacity: 100' : 'opacity: 0;'"
+   			:offset-x="toolbar.x"
+			:offset-y="toolbar.y"/>
+	</div>
 </template>
 
 <script>
@@ -24,13 +35,45 @@ import '@/assets/one-mixed.css'
 import { isVimLoaded, loadMode, loadVim } from '@/common/codemirror/codemirror'
 import Markdown from '@/common/markdown/markdown'
 import MarkdownEditorImage from '@/components/MarkdownEditorImage'
+import ToolBar from '@/components/ToolBar.vue';
 
 const GenerateImage = () => (Vue.extend(MarkdownEditorImage))
+
+// https://stackoverflow.com/questions/1409355/finding-the-offset-client-position-of-an-element
+function getElementTop ( elem )
+{
+    let yPos = elem.offsetTop;
+    let tempEl = elem.offsetParent;
+
+    while ( tempEl != null )
+    {
+        yPos += tempEl.offsetTop;
+        tempEl = tempEl.offsetParent;
+    }
+
+    return yPos;
+}
+
+
+function getElementLeft ( elem )
+{
+    let xPos = elem.offsetLeft;
+    let tempEl = elem.offsetParent;
+
+    while ( tempEl != null )
+    {
+        xPos += tempEl.offsetLeft;
+        tempEl = tempEl.offsetParent;
+    }
+    return xPos;
+}
+
 
 export default {
 	name: 'MarkdownEditor',
 	components: {
 		codemirror,
+		ToolBar,
 	},
 	props: {
 		initialCursor: {
@@ -75,6 +118,13 @@ export default {
 			text: '',
 			widgets: [],
 			imgIc: 0,
+			toolbar: {
+				show: false,
+				x: 0,
+				y: 0,
+				timeoutVal: 0,
+				timeout: 3000,
+			},
 		}
 	},
 	watch: {
@@ -225,6 +275,56 @@ export default {
 				this.isInitialVimModeSet = true
 			}
 		},
+		showToolbar() {
+			let x = 0;
+			let y = 0;
+			const cursor = this.editor.display.cursorDiv.lastChild;
+			const toolbarEl = this.$refs.tool.$el;
+			if ( cursor ) {
+				x = getElementLeft(cursor) - (toolbarEl.clientWidth / 2);
+				y = getElementTop(cursor) - (toolbarEl.clientHeight + 20);
+			} else {
+				const cursor = window.getSelection().anchorNode;
+				x = getElementLeft(cursor) - (toolbarEl.clientWidth / 2);
+				y = getElementTop(cursor) - (toolbarEl.clientHeight + 20);
+			}
+
+			this.toolbar.x = +x;
+			this.toolbar.y = +y;
+			this.toolbar.show = true;
+			if ( this.toolbar.timeout !== 0 ) {
+				clearTimeout(this.toolbar.timeoutVal);
+				this.toolbar.timeoutVal = 0;
+			}
+
+			this.toolbar.timeoutVal = setTimeout(() => {
+				this.toolbar.show = false;
+			}, this.toolbar.timeout);
+		},
+		onToolbarMouseOver() {
+			if ( this.toolbar.show ) {
+				clearTimeout(this.toolbar.timeoutVal);
+			}
+		},
+		onToolbarMouseLeave() {
+			if ( this.toolbar.show ) {
+				this.toolbar.timeoutVal = setTimeout(() => {
+					this.toolbar.show = false;
+				}, this.toolbar.timeout);
+			}
+		},
+		hideToolbar() {
+			if ( this.toolbar.timeout !== 0 ) {
+				clearTimeout(this.toolbar.timeoutVal);
+				this.toolbar.timeoutVal = 0;
+			}
+			this.toolbar.show = false;
+		},
+		onClick() {
+			this.$nextTick(() => {
+				this.showToolbar();
+			});
+		},
 		onInput(text) {
 			this.text = text
 
@@ -247,6 +347,9 @@ export default {
 				ch: this.initialCursor.character,
 				line: this.initialCursor.line,
 			})
+
+			instance.getWrapperElement().addEventListener('mouseup', this.onClick.bind(this));
+			instance.on('keydown', this.hideToolbar.bind(this));
 
 			this.$emit('ready', instance)
 			this.loadImages()

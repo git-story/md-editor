@@ -6,9 +6,11 @@
 -->
 <template>
 	<div
+	 	@mouseover="$emit('mouseover', $event)"
+	 	@mouseleave="$emit('mouseleave', $event)"
 		class="mde-toolbar-wrapper"
   		:class="dark && 'mde-dark'"
-		:style="{ left: offsetX, top: offsetY }">
+		:style="{ left: offsetX + 'px', top: offsetY + 'px' }">
 		<div class="mde-toolbar">
 			<icon-btn :dark="dark" icon="format-bold" @click="boldClick"/>
 			<icon-btn :dark="dark" icon="format-italic" @click="italicClick"/>
@@ -64,6 +66,8 @@ export default {
 	display: table;
 	padding: 7px 10px;
 	position: absolute;
+	z-index: 10;
+	transition: opacity 0.5s;
 }
 
 .mde-toolbar-wrapper.mde-dark {
