@@ -13,6 +13,7 @@
 				<span>dark</span>
 			</label>
 		</div>
+		<tool-bar />
 		<button @click="test">buildMarkdown</button><br>
 		<button @click="html">buildHTML</button><br>
 	</div>
@@ -20,11 +21,13 @@
 
 <script>
 import MarkdownEditor from './components/MarkdownEditor.vue'
+import ToolBar from './components/ToolBar.vue';
 
 export default {
 	name: 'App',
 	components: {
 		MarkdownEditor,
+		ToolBar,
 	},
 	data() {
 		return {
