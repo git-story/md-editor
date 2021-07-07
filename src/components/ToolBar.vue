@@ -8,6 +8,7 @@
 	<div
 	 	@mouseover="$emit('mouseover', $event)"
 	 	@mouseleave="$emit('mouseleave', $event)"
+	 	@mousedown="onMouseDown"
 		class="mde-toolbar-wrapper"
   		:class="dark && 'mde-dark'"
 		:style="{ left: offsetX + 'px', top: offsetY + 'px' }">
@@ -45,6 +46,9 @@ export default {
 		},
 	},
 	methods: {
+		onMouseDown(evt) {
+			evt.preventDefault();
+		},
 		boldClick(evt) {
 			console.log('bold', evt);
 		},
