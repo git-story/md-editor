@@ -363,9 +363,12 @@ export default {
 			if ( this.toolbar.show ) {
 				this.toolbar.timeoutVal = setTimeout(() => {
 					this.toolbar.show = false;
+					// opacity transform delay 0.5s
+					setTimeout(() => {
+						this.$refs.tool.$el.style.display = 'none';
+					}, 500);
 				}, this.toolbar.timeout);
 			}
-			this.$refs.tool.$el.style.display = 'none';
 		},
 		hideToolbar() {
 			if ( this.toolbar.timeout !== 0 ) {
@@ -373,7 +376,10 @@ export default {
 				this.toolbar.timeoutVal = 0;
 			}
 			this.toolbar.show = false;
-			this.$refs.tool.$el.style.display = 'none';
+			// opacity transform delay 0.5s
+			setTimeout(() => {
+				this.$refs.tool.$el.style.display = 'none';
+			}, 500);
 		},
 		onClick() {
 			this.$refs.tool.$el.style.display = 'unset';
