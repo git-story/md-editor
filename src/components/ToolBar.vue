@@ -13,11 +13,11 @@
   		:class="dark && 'mde-dark'"
 		:style="{ left: offsetX + 'px', top: offsetY + 'px' }">
 		<div class="mde-toolbar">
-			<icon-btn :dark="dark" icon="format-bold" @click="boldClick"/>
-			<icon-btn :dark="dark" icon="format-italic" @click="italicClick"/>
-			<icon-btn :dark="dark" icon="format-underlined" @click="underlinedClick"/>
+			<icon-btn :dark="dark" icon="format-bold" @click="$emit('bold')"/>
+			<icon-btn :dark="dark" icon="format-italic" @click="$emit('italic')"/>
+			<icon-btn :dark="dark" icon="format-underlined" @click="$emit('underlined')"/>
 			<divider vertical/>
-			<icon-btn :dark="dark" icon="image" @click="imageClick"/>
+			<icon-btn :dark="dark" icon="image" @click="$emit('image')"/>
 		</div>
 	</div>
 </template>
@@ -48,18 +48,6 @@ export default {
 	methods: {
 		onMouseDown(evt) {
 			evt.preventDefault();
-		},
-		boldClick(evt) {
-			console.log('bold', evt);
-		},
-		italicClick(evt) {
-			console.log('italic', evt);
-		},
-		underlinedClick(evt) {
-			console.log('underlined', evt);
-		},
-		imageClick(evt) {
-			console.log('image', evt);
 		},
 	},
 }

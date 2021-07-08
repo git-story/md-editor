@@ -15,7 +15,11 @@
 			:dark="theme === 'dark'"
 	 		:style="toolbar.show ? 'opacity: 100' : 'opacity: 0;'"
    			:offset-x="toolbar.x"
-			:offset-y="toolbar.y"/>
+			:offset-y="toolbar.y"
+			@bold="bold"
+			@italic="italic"
+			@underlined="underlined"
+			@image="image"/>
 	</div>
 </template>
 
@@ -209,6 +213,31 @@ export default {
 		},
 	},
 	methods: {
+		bold() {
+			const selection = this.editor.getSelection();
+			if ( selection ) {
+				const from = this.editor.getCursor(true);
+				const to = this.editor.getCursor(false);
+
+				this.editor.replaceSelection(`**${selection}**`);
+				from.ch += 2;
+				to.ch += 2;
+				this.editor.setSelection(from, to);
+			} else {
+				const cursor = this.editor.getCursor();
+				this.editor.replaceSelection('**bold**');
+				cursor.ch += 2; // b
+				const endCursor = { ...cursor }; // copy
+				endCursor.ch += 4; // d
+				this.editor.setSelection(cursor, endCursor);
+			}
+		},
+		italic() {
+		},
+		underlined() {
+		},
+		image() {
+		},
 		focus() {
 			this.editor.focus()
 		},
