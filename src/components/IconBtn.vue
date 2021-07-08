@@ -27,7 +27,7 @@ export default {
 	},
 	computed: {
 		iconSvg() {
-			return require(`@/assets/icons/${this.icon}${!this.dark ? '-dark' : ''}.svg`);
+			return require(`@/assets/icons/${this.icon}${this.dark ? '-dark' : ''}.svg`);
 		},
 		iconSize() {
 			switch( this.size ) {
@@ -39,31 +39,32 @@ export default {
 }
 </script>
 <style scoped>
+@import url("../assets/toolbar.css");
 .mde-icon-btn-wrapper {
 	cursor: pointer;
-	background-color: #000000;
+	background-color: var(--mde-light-bg-color);
 	transition: background 0.8s;
 }
 
 .mde-dark .mde-icon-btn-wrapper {
-	background-color: #ffffff;
+	background-color: var(--mde-dark-bg-color);
 }
 
 .mde-icon-btn-wrapper:hover {
-	background: #424242 radial-gradient(circle, transparent 1%, #424242 1%) center/15000%;
+	background: var(--mde-light-hover-color) radial-gradient(circle, transparent 1%, var(--mde-light-hover-color) 1%) center/15000%;
 }
 
 .mde-dark .mde-icon-btn-wrapper:hover {
-	background: #ebebeb radial-gradient(circle, transparent 1%, #ebebeb 1%) center/15000%;
+	background: var(--mde-dark-hover-color) radial-gradient(circle, transparent 1%, var(--mde-dark-hover-color) 1%) center/15000%;
 }
 
 .mde-icon-btn-wrapper:active {
-	background-color: #595959;
+	background-color: var(--mde-light-active-color);
 	transition: background 0s;
 }
 
 .mde-dark .mde-icon-btn-wrapper:active {
-	background-color: #afafaf;
+	background-color: var(--mde-dark-active-color);
 	transition: background 0s;
 }
 

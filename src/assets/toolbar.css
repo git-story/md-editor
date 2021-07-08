@@ -1,0 +1,17 @@
+/*
+ * toolbar.css
+ * Created on Thu Jul 08 2021
+ *
+ * Copyright (c) git-story. Licensed under the MIT License.
+ */
+
+:root {
+	--mde-light-bg-color: #CFD8DC;
+	--mde-light-div-color: #ECEFF1;
+	--mde-light-hover-color: #ECEFF1;
+	--mde-light-active-color: #90A4AE;
+	--mde-dark-bg-color: #37474F;
+	--mde-dark-div-color: #90A4AE;
+	--mde-dark-hover-color: #90A4AE;
+	--mde-dark-active-color: #546E7A;
+}

@@ -19,6 +19,7 @@ export default {
 }
 </script>
 <style scoped>
+@import url("../assets/toolbar.css");
 .mde-divider {
 	display: block;
 	flex: 1 1 0px;
@@ -28,8 +29,11 @@ export default {
 	border: solid;
 	border-width: thin 0 0;
 	transition: inherit;
-	border-color: #afafaf;
-	color: #ebebeb;
+	border-color: var(--mde-light-div-color);
+}
+
+.mde-dark .mde-divider {
+	border-color: var(--mde-dark-div-color);
 }
 
 .mde-divider-vertical {
@@ -43,7 +47,11 @@ export default {
 	width: 0;
 	vertical-align: text-bottom;
 	margin: 0;
-	border-color: #ebebeb;
+	border-color: var(--mde-light-div-color);
 	height: 35px;
+}
+
+.mde-dark .mde-divider-vertical {
+	border-color: var(--mde-dark-div-color);
 }
 </style>

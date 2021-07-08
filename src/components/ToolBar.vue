@@ -53,8 +53,9 @@ export default {
 }
 </script>
 <style scoped>
+@import url("../assets/toolbar.css");
 .mde-toolbar-wrapper {
-	background-color: #000000;
+	background-color: var(--mde-light-bg-color);
 	display: table;
 	padding: 7px 10px;
 	position: absolute;
@@ -63,7 +64,7 @@ export default {
 }
 
 .mde-toolbar-wrapper.mde-dark {
-	background-color: #ffffff;
+	background-color: var(--mde-dark-bg-color);
 }
 
 .mde-toolbar:before {
@@ -73,14 +74,14 @@ export default {
 	position: absolute;
 	border-left: 20px solid transparent;
 	border-right: 20px solid transparent;
-	border-top: 20px solid #000000;
+	border-top: 20px solid var(--mde-light-bg-color);
 	border-bottom: 20px solid transparent;
 	left: calc(50% - 20px);
 	bottom: -40px;
 }
 
 .mde-dark .mde-toolbar:before {
-	border-top: 20px solid #ffffff;
+	border-top: 20px solid var(--mde-dark-bg-color);
 }
 
 .mde-toolbar {
