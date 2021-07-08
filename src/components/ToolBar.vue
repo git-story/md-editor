@@ -15,7 +15,7 @@
 		<div class="mde-toolbar">
 			<icon-btn :dark="dark" icon="format-bold" @click="$emit('bold')"/>
 			<icon-btn :dark="dark" icon="format-italic" @click="$emit('italic')"/>
-			<icon-btn :dark="dark" icon="format-underlined" @click="$emit('underlined')"/>
+			<icon-btn :dark="dark" icon="format-strike" @click="$emit('strike')"/>
 			<divider vertical/>
 			<icon-btn :dark="dark" icon="image" @click="$emit('image')"/>
 		</div>

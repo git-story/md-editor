@@ -18,7 +18,7 @@
 			:offset-y="toolbar.y"
 			@bold="bold"
 			@italic="italic"
-			@underlined="underlined"
+			@strike="strike"
 			@image="image"/>
 	</div>
 </template>
@@ -213,28 +213,33 @@ export default {
 		},
 	},
 	methods: {
-		bold() {
+		replaceSyntax(open, close, def) {
 			const selection = this.editor.getSelection();
 			if ( selection ) {
 				const from = this.editor.getCursor(true);
 				const to = this.editor.getCursor(false);
 
-				this.editor.replaceSelection(`**${selection}**`);
-				from.ch += 2;
-				to.ch += 2;
+				this.editor.replaceSelection(`${open}${selection}${close}`);
+				from.ch += open.length;
+				to.ch += open.length;
 				this.editor.setSelection(from, to);
 			} else {
 				const cursor = this.editor.getCursor();
-				this.editor.replaceSelection('**bold**');
-				cursor.ch += 2; // b
+				this.editor.replaceSelection(`${open}${def}${close}`);
+				cursor.ch += open.length;
 				const endCursor = { ...cursor }; // copy
-				endCursor.ch += 4; // d
+				endCursor.ch += def.length;
 				this.editor.setSelection(cursor, endCursor);
 			}
 		},
-		italic() {
+		bold() {
+			this.replaceSyntax('**', '**', 'bold');
 		},
-		underlined() {
+		italic() {
+			this.replaceSyntax(' _', '_ ', 'italic');
+		},
+		strike() {
+			this.replaceSyntax('~~', '~~', 'strike');
 		},
 		image() {
 		},
