@@ -1,5 +1,5 @@
 import { parseCodeblocks } from './parsers'
-import { extractImages, stripCodeblocks } from './utils'
+import { extractImages, extractFiles, stripCodeblocks } from './utils'
 import marked from 'marked';
 import hljs from 'highlight.js';
 
@@ -39,6 +39,10 @@ class Markdown {
 
 	images() {
 		return extractImages(this.text)
+	}
+
+	files() {
+		return extractFiles(this.text);
 	}
 
 	stripCodeblocks() {

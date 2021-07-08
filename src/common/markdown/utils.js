@@ -1,4 +1,4 @@
-import { parseImages } from './parsers'
+import { parseImages, parseFiles } from './parsers'
 
 const multilineTokens = ['````', '```']
 const inlineTokens = ['``', '`']
@@ -19,6 +19,24 @@ export const extractImages = (text) => {
 	})
 
 	return images
+}
+
+export const extractFiles = (text) => {
+	const files = []
+
+	stripCodeblocks(text).split('\n').forEach((line, index) => {
+		const matches = parseImages(line)
+
+		files.push(
+			...matches.map((match) => ({
+				name: match.name || null,
+				line: index,
+				url: match.url,
+			})),
+		)
+	})
+
+	return files;
 }
 
 export const stripCodeblocks = (text) => stripInlineCodeblocks(

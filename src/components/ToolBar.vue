@@ -18,6 +18,7 @@
 			<icon-btn :dark="dark" icon="format-strike" @click="$emit('strike')"/>
 			<divider vertical/>
 			<icon-btn :dark="dark" icon="image" @click="$emit('image')"/>
+			<icon-btn :dark="dark" icon="attach-file" @click="$emit('attach-file')"/>
 		</div>
 	</div>
 </template>

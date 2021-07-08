@@ -19,7 +19,8 @@
 			@bold="bold"
 			@italic="italic"
 			@strike="strike"
-			@image="image"/>
+			@image="image"
+			@attach-file="attachFile"/>
 		<input ref="upload" type="file" style="display: none;">
 	</div>
 </template>
@@ -41,8 +42,10 @@ import { isVimLoaded, loadMode, loadVim } from '@/common/codemirror/codemirror'
 import Markdown from '@/common/markdown/markdown'
 import MarkdownEditorImage from '@/components/MarkdownEditorImage'
 import ToolBar from '@/components/ToolBar.vue';
+import MarkdownFileAttach from '@/components/MarkdownFileAttach.vue';
 
 const GenerateImage = () => (Vue.extend(MarkdownEditorImage))
+const GenerateFileAttach = () => (Vue.extend(MarkdownFileAttach))
 
 // https://stackoverflow.com/questions/1409355/finding-the-offset-client-position-of-an-element
 function getElementTop ( elem )
@@ -122,6 +125,7 @@ export default {
 			isVimLoaded: false,
 			text: '',
 			widgets: [],
+			fileWidgets: [],
 			imgIc: 0,
 			toolbar: {
 				show: false,
@@ -146,6 +150,9 @@ export default {
 		},
 		images() {
 			return this.markdown.images()
+		},
+		files() {
+			return this.markdown.files();
 		},
 		keyMap() {
 			if (this.config.keyMap === 'vim' && !this.isVimLoaded) return 'default'
@@ -253,12 +260,44 @@ export default {
 				const lines = this.value.split('\n');
 				const md = `![image${this.imgIc++}](${url})`;
 				cursor.ch = md.length;
-				cursor.line += 1; // next line
-				lines.splice(cursor.line, 0, md);
-				this.$emit('input', lines.join('\n'));
-				this.$nextTick(() => {
-					this.editor.setCursor(cursor);
-				});
+				if ( cursor.line + 1 < lines.length ) {
+					cursor.line += 1; // next line insert
+					lines.splice(cursor.line, 0, md);
+					this.$emit('input', lines.join('\n'));
+					this.$nextTick(() => {
+						this.editor.setCursor(cursor);
+					});
+				} else {
+					const line = this.editor.getLine(cursor.line);
+					const pos = { line: cursor.line, ch: line.length };
+					this.editor.replaceRange('\n' + md, pos);
+				}
+			};
+			uploadEl.click();
+		},
+		attachFile() {
+			const cursor = this.editor.getCursor(false);
+			const uploadEl = this.$refs.upload;
+			uploadEl.setAttribute('accept', '*');
+			uploadEl.onchange = async ({ target }) => {
+				const [ file ] = target.files;
+				const url = URL.createObjectURL(file);
+
+				const lines = this.value.split('\n');
+				const md = `!{${file.name}}(${url})`;
+				cursor.ch = md.length;
+				if ( cursor.line + 1 < lines.length ) {
+					cursor.line += 1; // next line insert
+					lines.splice(cursor.line, 0, md);
+					this.$emit('input', lines.join('\n'));
+					this.$nextTick(() => {
+						this.editor.setCursor(cursor);
+					});
+				} else {
+					const line = this.editor.getLine(cursor.line);
+					const pos = { line: cursor.line, ch: line.length };
+					this.editor.replaceRange('\n' + md, pos);
+				}
 			};
 			uploadEl.click();
 		},
@@ -297,6 +336,31 @@ export default {
 					this.widgets.push(lineWidget)
 				})
 			}
+		},
+		loadFiles() {
+			// clear all line widgets
+			// TODO: only clear the ones that change
+			this.fileWidgets.forEach((widget) => this.editor.removeLineWidget(widget))
+
+			/*
+			this.files.forEach((file) => {
+				let lineWidget
+
+				const FileInstance = GenerateFileAttach()
+
+				const component = new FileInstance({
+					propsData: {
+						onError: () => lineWidget.changed(),
+						onLoad: () => lineWidget.changed(),
+						source: file.url,
+					},
+				})
+
+				lineWidget = this.editor.addLineWidget(file.line, component.$mount().$el, { above: true })
+
+				this.fileWidgets.push(lineWidget)
+			})
+			*/
 		},
 		loadModes() {
 			this.codeblocks.forEach((codeblock) => {
@@ -396,6 +460,7 @@ export default {
 			}
 
 			this.loadImages()
+			this.loadFiles()
 			this.loadModes()
 		},
 		onReady(instance) {
@@ -415,6 +480,7 @@ export default {
 
 			this.$emit('ready', instance)
 			this.loadImages()
+			this.loadFiles()
 			this.loadModes()
 		},
 		refresh() {
