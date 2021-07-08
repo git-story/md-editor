@@ -365,6 +365,7 @@ export default {
 					this.toolbar.show = false;
 				}, this.toolbar.timeout);
 			}
+			this.$refs.tool.$el.style.display = 'none';
 		},
 		hideToolbar() {
 			if ( this.toolbar.timeout !== 0 ) {
@@ -372,8 +373,10 @@ export default {
 				this.toolbar.timeoutVal = 0;
 			}
 			this.toolbar.show = false;
+			this.$refs.tool.$el.style.display = 'none';
 		},
 		onClick() {
+			this.$refs.tool.$el.style.display = 'unset';
 			this.$nextTick(() => {
 				this.showToolbar();
 			});
