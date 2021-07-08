@@ -20,6 +20,7 @@
 			@italic="italic"
 			@strike="strike"
 			@image="image"/>
+		<input ref="upload" type="file" style="display: none;">
 	</div>
 </template>
 
@@ -242,6 +243,24 @@ export default {
 			this.replaceSyntax('~~', '~~', 'strike');
 		},
 		image() {
+			const cursor = this.editor.getCursor(false);
+			const uploadEl = this.$refs.upload;
+			uploadEl.setAttribute('accept', 'image/*');
+			uploadEl.onchange = async ({ target }) => {
+				const [ file ] = target.files;
+				const url = URL.createObjectURL(file);
+
+				const lines = this.value.split('\n');
+				const md = `![image${this.imgIc++}](${url})`;
+				cursor.ch = md.length;
+				cursor.line += 1; // next line
+				lines.splice(cursor.line, 0, md);
+				this.$emit('input', lines.join('\n'));
+				this.$nextTick(() => {
+					this.editor.setCursor(cursor);
+				});
+			};
+			uploadEl.click();
 		},
 		focus() {
 			this.editor.focus()
