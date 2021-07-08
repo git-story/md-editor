@@ -25,7 +25,7 @@ export const extractFiles = (text) => {
 	const files = []
 
 	stripCodeblocks(text).split('\n').forEach((line, index) => {
-		const matches = parseImages(line)
+		const matches = parseFiles(line)
 
 		files.push(
 			...matches.map((match) => ({

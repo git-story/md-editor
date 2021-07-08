@@ -42,7 +42,7 @@ import { isVimLoaded, loadMode, loadVim } from '@/common/codemirror/codemirror'
 import Markdown from '@/common/markdown/markdown'
 import MarkdownEditorImage from '@/components/MarkdownEditorImage'
 import ToolBar from '@/components/ToolBar.vue';
-import MarkdownFileAttach from '@/components/MarkdownFileAttach.vue';
+import MarkdownFileAttach from '@/components/MarkdownFileAttach';
 
 const GenerateImage = () => (Vue.extend(MarkdownEditorImage))
 const GenerateFileAttach = () => (Vue.extend(MarkdownFileAttach))
@@ -342,7 +342,8 @@ export default {
 			// TODO: only clear the ones that change
 			this.fileWidgets.forEach((widget) => this.editor.removeLineWidget(widget))
 
-			/*
+			console.log('Called loadFIles');
+
 			this.files.forEach((file) => {
 				let lineWidget
 
@@ -353,14 +354,15 @@ export default {
 						onError: () => lineWidget.changed(),
 						onLoad: () => lineWidget.changed(),
 						source: file.url,
+						name: file.name,
 					},
 				})
 
 				lineWidget = this.editor.addLineWidget(file.line, component.$mount().$el, { above: true })
+				console.log(lineWidget);
 
 				this.fileWidgets.push(lineWidget)
 			})
-			*/
 		},
 		loadModes() {
 			this.codeblocks.forEach((codeblock) => {
