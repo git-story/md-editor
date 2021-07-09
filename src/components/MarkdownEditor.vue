@@ -542,15 +542,40 @@ export default {
 		},
 		async buildMarkdown() {
 			const md = this.markdown;
-			const splMd = md.text.split('\n');
-			for ( const img of this.images ) {
-				if ( img.url.startsWith('blob:') ) {
-					const b64img = await this.blobToBase64(img.url);
-					const repl = splMd[img.line].replace(/!\[(.*?)\]\((.+?)\)/, `![$1](${b64img})`);
-					md.replaceLine(img.line, repl);
+
+			// https://github.com/git-story/git-story/issues/7
+			for ( const file of this.files ) {
+				if ( file.url.startsWith('blob:') ) {
+					const b64url = await this.blobToBase64(file.url);
+					const url = await this.uploadFile(b64url);
+
+					const FileInstacne = GenerateFileAttach();
+					const component = new FileInstacne({
+						propsData: {
+							onError: () => {},
+							onLoad: () => {},
+							source: url,
+							name: file.name,
+						},
+					});
+					component.$mount();
+
+					md.replaceLine(file.line, component.$el.outerHTML);
 				}
 			}
 			return md.text;
+		},
+		uploadFile(b64) {
+			return new Promise((resolve, reject) => {
+				const data = this.parseB64URL(b64);
+				if ( typeof this.$listeners.upload === 'function' ) {
+					this.$emit('upload', data, (result) => {
+						resolve(result);
+					});
+				} else {
+					return resolve(b64);
+				}
+			});
 		},
 	},
 	created() {

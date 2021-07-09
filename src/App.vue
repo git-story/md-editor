@@ -2,7 +2,12 @@
 	<div class="app">
 		<h1>vue-markdown-editor</h1>
 		<p>A Markdown editor component for Vue that renders in place without the need for a preview pane. This is the component that powers <a href="https://github.com/voraciousdev/octo">Octo</a>.</p>
-		<MarkdownEditor ref="editor" v-model="markdown" :theme="theme" :settings="{ images: { enabled: true } }" class="editor" />
+		<MarkdownEditor
+			ref="editor"
+			v-model="markdown"
+			:theme="theme"
+			:settings="{ images: { enabled: true } }"
+			class="editor"/>
 		<div class="toggle">
 			<label>
 				<input v-model="theme" type="radio" value="light">
@@ -16,6 +21,8 @@
 		<tool-bar :dark="theme === 'dark'"/>
 		<button @click="test">buildMarkdown</button><br>
 		<button @click="html">buildHTML</button><br>
+
+		<div ref="html"></div>
 	</div>
 </template>
 
@@ -47,10 +54,14 @@ export default {
 	},
 	methods: {
 		async test() {
-			console.log(await this.$refs.editor.buildMarkdown());
+			const md = await this.$refs.editor.buildMarkdown();
+			console.log(md);
+			this.$refs.html.innerHTML = md;
 		},
 		html() {
 			console.log(this.$refs.editor.markdown.html);
+		},
+		upload() {
 		},
 	},
 }
