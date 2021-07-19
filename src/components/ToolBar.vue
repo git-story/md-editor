@@ -13,24 +13,30 @@
   		:class="dark && 'mde-dark'"
 		:style="{ left: offsetX + 'px', top: offsetY + 'px' }">
 		<div class="mde-toolbar">
-			<icon-btn :dark="dark" icon="format-bold" @click="$emit('bold')"/>
-			<icon-btn :dark="dark" icon="format-italic" @click="$emit('italic')"/>
-			<icon-btn :dark="dark" icon="format-strike" @click="$emit('strike')"/>
+			<icon-btn :dark="dark" :icon="assets.formatBold" @click="$emit('bold')"/>
+			<icon-btn :dark="dark" :icon="assets.formatItalic" @click="$emit('italic')"/>
+			<icon-btn :dark="dark" :icon="assets.formatStrike" @click="$emit('strike')"/>
 			<divider vertical/>
-			<icon-btn :dark="dark" icon="image" @click="$emit('image')"/>
-			<icon-btn :dark="dark" icon="attach-file" @click="$emit('attach-file')"/>
+			<icon-btn :dark="dark" :icon="assets.image" @click="$emit('image')"/>
+			<icon-btn :dark="dark" :icon="assets.attachFile" @click="$emit('attach-file')"/>
 		</div>
 	</div>
 </template>
 <script>
 import IconBtn from './IconBtn.vue';
 import Divider from './Divider.vue';
+import * as assets from '@/assets/icons/';
 
 export default {
 	name: 'ToolBar',
 	components: {
 		IconBtn,
 		Divider,
+	},
+	data() {
+		return {
+			assets,
+		};
 	},
 	props: {
 		offsetX: {

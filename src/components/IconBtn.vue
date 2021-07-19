@@ -15,7 +15,7 @@
 export default {
 	name: 'IconBtn',
 	props: {
-		icon: String,
+		icon: Object,
 		size: {
 			type: String,
 			default: 'md',
@@ -27,7 +27,7 @@ export default {
 	},
 	computed: {
 		iconSvg() {
-			return require(`@/assets/icons/${this.icon}${this.dark ? '-dark' : ''}.svg`);
+			return `"${this.dark ? this.icon.dark : this.icon.default}"`;
 		},
 		iconSize() {
 			switch( this.size ) {
