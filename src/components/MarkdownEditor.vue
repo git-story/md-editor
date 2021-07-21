@@ -394,7 +394,7 @@ export default {
 				this.isInitialVimModeSet = true
 			}
 		},
-		showToolbar() {
+		__showToolbar() {
 			const MIN_PADDING_OFFSET = 15;
 			let x = 0;
 			let y = 0;
@@ -456,11 +456,14 @@ export default {
 				this.$refs.tool.$el.style.display = 'none';
 			}, 500);
 		},
-		onClick() {
+		showToolbar() {
 			this.$refs.tool.$el.style.display = 'unset';
 			this.$nextTick(() => {
-				this.showToolbar();
+				this.__showToolbar();
 			});
+		},
+		onClick() {
+			this.showToolbar();
 		},
 		onInput(text) {
 			this.text = text
