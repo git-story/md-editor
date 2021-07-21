@@ -395,6 +395,7 @@ export default {
 			}
 		},
 		showToolbar() {
+			const MIN_PADDING_OFFSET = 15;
 			let x = 0;
 			let y = 0;
 			const cursor = this.editor.display.cursorDiv.lastChild;
@@ -406,6 +407,14 @@ export default {
 				const cursor = window.getSelection().anchorNode;
 				x = getElementLeft(cursor) - (toolbarEl.clientWidth / 2);
 				y = getElementTop(cursor) - (toolbarEl.clientHeight + 20);
+			}
+
+			if ( x < MIN_PADDING_OFFSET ) {
+				x = MIN_PADDING_OFFSET;
+			}
+
+			if ( y < MIN_PADDING_OFFSET ) {
+				y = MIN_PADDING_OFFSET;
 			}
 
 			this.toolbar.x = +x;
